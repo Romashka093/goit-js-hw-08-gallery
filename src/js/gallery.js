@@ -85,20 +85,34 @@ function handleEscape(evt) {
   hangeleCloseButton();
 }
 // Пролистывание изображений галереи в открытом модальном окне клавишами "влево" и "вправо".
+let originItems = [];
+galleryItems.forEach(item => {
+  originItems.push(item.original);
+});
+console.log(originItems);
 
 function handleScrolling(evt) {
-  console.dir(evt.keyCode);
-  console.log(evt.target.nodeName);
-  console.log(evt.key);
-  console.dir(evt.code);
-  const item = document.querySelector("li.gallery__item");
-  console.dir(item.nodeName);
+  // console.dir(evt.keyCode); // 46
+  // console.log(evt.target.nodeName); // BODY
+  // console.log(evt.key); // .
+  // console.dir(evt.code); // Period
+  const item = document.querySelector(".lightbox__image");
+  console.log(item.src);
+  let index = originItems.indexOf(item.src);
+  console.log(index);
+
+  // console.dir(item);
   if (evt.target !== evt.currentTarget) {
     if (evt.code === "Period") {
       console.log("Yep!, see next");
-      console.log(item.nextElementSibling);
+      console.log(originItems[index + 1]);
+      item.setAttribute("src", originItems[index + 1]);
     } else if (evt.code === "Comma") {
       console.log("No! Lets see prev");
+      console.log(originItems[index - 1]);
+      item.setAttribute("src", originItems[index - 1]);
+    } else {
+      return item.src;
     }
   }
 }
