@@ -2,17 +2,15 @@
 
 import galleryItems from "./../gallery-items.js";
 
-console.log(galleryItems);
-
 const ref = {
   gallery: document.querySelector(".js-gallery"),
   closeButton: document.querySelector('button[data-action="close-lightbox"]'),
-  overlay: document.querySelector("div.lightbox__content")
+  overlay: document.querySelector("div.lightbox__content"),
+  item: document.querySelector(".lightbox__image"),
+  open: document.querySelector("div.lightbox"),
+  img: document.querySelector(".lightbox__image")
 };
 
-console.log("Gallery:", ref.gallery);
-console.log("Btn:", ref.closeButton);
-console.log("Overlay:", ref.overlay);
 // Создание и рендер разметки по массиву данных и предоставленному шаблону.
 let imageItem = "";
 galleryItems.forEach(item => {
@@ -39,32 +37,25 @@ ref.overlay.addEventListener("click", hangeleCloseOverlay);
 
 function handeleOpenItem(evt) {
   evt.preventDefault();
-
   const targetImage = evt.target;
-
   if (targetImage === evt.currentTarget) {
     return; // при нажатии на ul - мы выходим
   }
-
   // Открытие модального окна по клику на элементе галереи.
-  const open = document.querySelector("div.lightbox");
-  open.classList.add("is-open");
+  ref.open.classList.add("is-open");
   // Подмена значения атрибута src элемента img.lightbox__image.
-  const img = document.querySelector(".lightbox__image");
-  img.alt = targetImage.alt;
-  img.src = targetImage.dataset.source;
+  ref.img.alt = targetImage.alt;
+  ref.img.src = targetImage.dataset.source;
   window.addEventListener("keyup", handleEscape);
   window.addEventListener("keypress", handleScrolling);
 }
 // Закрытие модального окна по клику на кнопку button[data-action="close-modal"].
 function hangeleCloseButton() {
-  const open = document.querySelector("div.lightbox");
-  open.classList.remove("is-open");
+  ref.open.classList.remove("is-open");
   // Очистка значения атрибута src элемента img.lightbox__image. Это необходимо для того,
   // чтобы при следующем открытии модального окна, пока грузится изображение, мы не видели предыдущее.
-  const img = document.querySelector(".lightbox__image");
-  img.alt = "";
-  img.src = "";
+  ref.img.alt = "";
+  ref.img.src = "";
   window.removeEventListener("keyup", handleEscape);
   window.removeEventListener("keypress", handleScrolling);
 }
@@ -74,7 +65,6 @@ function hangeleCloseOverlay(evt) {
   if (evt.target !== evt.currentTarget) {
     return;
   }
-
   hangeleCloseButton();
 }
 // Закрытие модального окна по нажатию клавиши ESC.
@@ -89,30 +79,50 @@ let originItems = [];
 galleryItems.forEach(item => {
   originItems.push(item.original);
 });
-console.log(originItems);
 
 function handleScrolling(evt) {
-  // console.dir(evt.keyCode); // 46
-  // console.log(evt.target.nodeName); // BODY
-  // console.log(evt.key); // .
-  // console.dir(evt.code); // Period
-  const item = document.querySelector(".lightbox__image");
-  console.log(item.src);
-  let index = originItems.indexOf(item.src);
-  console.log(index);
+  // console.log(ref.item.src);
+  // let index = originItems.indexOf(ref.item.src);
+  // console.log(index);
+  // console.log("target:", evt.target);
+  // console.log("current:", evt.currentTarget);
+  // console.log("Code", evt.code);
+  // console.log("Key", evt.keyCode);
+  alert(evt.keyCode);
 
-  // console.dir(item);
-  if (evt.target !== evt.currentTarget) {
-    if (evt.code === "Period") {
-      console.log("Yep!, see next");
-      console.log(originItems[index + 1]);
-      item.setAttribute("src", originItems[index + 1]);
-    } else if (evt.code === "Comma") {
-      console.log("No! Lets see prev");
-      console.log(originItems[index - 1]);
-      item.setAttribute("src", originItems[index - 1]);
-    } else {
-      return item.src;
-    }
-  }
+  // if (evt.target !== evt.currentTarget) {
+
+  // }
+  // if (evt.code === "Period") {
+  //   ref.item.setAttribute("src", originItems[index + 1]);
+  // } else if (evt.code === "Comma") {
+  //   ref.item.setAttribute("src", originItems[index - 1]);
+  // } else {
+  //   return console.log(ref.item.src);
+  // }
+
+  /////
+  // if (evt.keyCode === 39) {
+  //   console.log("evt.keyCode :", evt.keyCode);
+  //   ref.item.setAttribute("src", originItems[index + 1]);
+  // }
+  // if (evt.keyCode === 37) {
+  //   console.log("evt.keyCode :", evt.keyCode);
+  //   ref.item.setAttribute("src", originItems[index - 1]);
+  // }
+  // if (evt.code === ArrowRight) {
+  //   if (index < originItems.length - 1) {
+  //     refs.item.setAttribute("src", originItems[index + 1]);
+  //   } else {
+  //     index = -1;
+  //     refs.item.setAttribute("src", originItems[index + 1]);
+  //   }
+  // }
+
+  // if (evt.code === ArrowLeft) {
+  //   if (index === 0) {
+  //     index = originItems.length;
+  //     refs.item.setAttribute("src", originItems[index - 1]);
+  //   } else refs.item.setAttribute("src", originItems[index - 1]);
+  // }
 }
